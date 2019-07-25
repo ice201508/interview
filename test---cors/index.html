@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>前后端分离的开发模式</title>
+  <script src="https://cdn.bootcss.com/axios/0.19.0/axios.js"></script>
+</head>
+<body>
+  <button id="get">发送get请求</button>
+  <button id="post">发送post请求</button>
+
+  <script>
+    document.querySelector('#get').onclick=function(){
+      axios.get('http://localhost:3000/list').then(function(res){
+        console.log(res)
+      })
+    }
+
+    document.querySelector('#post').onclick=function(){
+      axios.post('http://localhost:3000/login').then(function(res){
+        console.log(res)
+      })
+    }
+  </script>
+</body>
+</html>
