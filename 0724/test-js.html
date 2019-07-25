@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app1">测试获取值</div>
+  <div id="app2">测试获取值</div>
+  <div id="app3">测试获取值1</div>
+  <script>
+    // 这里使用立即自执行函数，是为了避免变量的命名污染
+    // 就是说外面的代码访问到这个函数里面的变量
+    ;(function(){
+      // 1. 闭包, 常见的DOM事件
+      document.getElementById('app1').addEventListener('click', function(){
+        setTimeout(() => {  // 换成function 怎样实现和一样的效果
+          console.dir(this)
+          console.log(this.innerText)
+        }, 500);
+      })
+      // 2. 保存当前环境下的this值到变量that中，约定的变量名称
+      document.getElementById('app2').addEventListener('click', function(){
+        var that = this;
+        setTimeout(function(){  // 换成function 怎样实现和一样的效果
+          console.dir(that)
+          console.log(that.innerText)
+        }, 500);
+      })
+      // 3.使用bind对上面代码进行改装
+      var obj = document.getElementById('app3');
+      obj.addEventListener('click', function(){
+        setTimeout(fn.bind(obj), 500);
+      })
+      function fn(){
+        console.log(this, this===obj)
+        console.log(this.innerText)
+      }
+    })();
+
+    // 不同调用方式，函数里的this值不一样，
+    // 记住一句话： 谁调用我这个函数，我函数里面的this就指向谁
+    // call的语法糖实现
+    // 1. 普通调用
+    var number_cur = 1;
+    function fn1(argc){
+      console.log(argc + '--拼接了没有？')
+    }
+    fn1('123') 
+    fn1.call(window, '456');
+    fn1.call(undefined, '789')
+    // 等价于 fn1.call(window, '123');
+    // 严格模式下为 fn1.call(undefined, '123')
+
+    // 2. 作为对象的方法调用
+    var obj = {
+      title: '这是对象里面的title',
+      fn2: function(argc){
+        // 'use strict'; //严格模式下 this的变化
+        console.log(this, " 字符串的拼接-- "+argc)
+      }
+    }
+    obj.fn2('随便传递参数');
+    obj.fn2.call(obj, '传递的参数')
+    // 等价于 obj.fn2.call(obj, '传递的参数')
+
+    // 2.1 注意，对象里面的方法调用，this值并不一定执行当前对象
+    var fn3 = obj.fn2;
+    fn3(); //这个里面的this指向window， 严格模式下指向undeinfed
+
+    // 自己对bind函数的实现
+    var bindSelf = function(func, thisValue) {
+      return function() {
+        return func.apply(thisValue, arguments);
+      }
+    }
+    var fn4 = bindSelf(obj.fn2,'bind传递进去的参数')
+    fn4(); //这个函数的this已经被我们改变了，不是window
+  </script>
+</body>
+</html>
