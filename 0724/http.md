@@ -20,7 +20,7 @@
 ### 简单请求和非简单请求
 
 1. 简单请求的要求
-   1. 请求方法是 HEAD,GET,POST三种方法之一
+   1. 请求方法是 HEAD,GET,POST三种方法之一要
    2. HTTP的头部信息不超出规定的几种字段
    3. Content-Type的值 只能是 `application/x-www-form-urlencoded、multipart/form-data、text/plain`
 2. 满足上面三个条件的是简单请求，其他的都是非简单请求，浏览器对于这两种请求的处理是不一样的
